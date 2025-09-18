@@ -1,4 +1,5 @@
 using JwtDotNet.Data;
+using JwtDotNet.Services;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 
@@ -13,6 +14,7 @@ builder.Services.AddOpenApi();
 //Db Context 
 builder.Services.AddDbContext<UserDbContext>(DbContextOptions => DbContextOptions.UseMySql(builder.Configuration.GetConnectionString("UserDatabase"), serverVersion).LogTo(Console.WriteLine, LogLevel.Information).EnableSensitiveDataLogging().EnableDetailedErrors());
 
+builder.Services.AddScoped<IAuthService,AuthService>();
 var app = builder.Build();
 
 
