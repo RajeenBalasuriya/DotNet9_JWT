@@ -21,5 +21,22 @@ namespace JwtDotNet.Controllers
             // Registration logic here (e.g., save user to database)
             return Ok(user);
         }
+
+        [HttpPost("login")]
+        public ActionResult<string> Login(UserDto request)
+        {
+            if (user.Username != request.Username)
+            {
+                return BadRequest("User not found.");
+            }
+
+            if (new PasswordHasher<User>().VerifyHashedPassword(user, user.PasswordHash, request.Password) == PasswordVerificationResult.Failed)
+            {
+                return BadRequest("Wrong password.");
+            }
+
+            string token = "sucess";
+            return Ok(token);
+        }
     }
 }
