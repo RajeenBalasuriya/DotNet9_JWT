@@ -8,6 +8,7 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
+Console.WriteLine(builder.Configuration.GetValue<string>("AppSettings:Token"));
 
 
 // Configure the HTTP request pipeline.
