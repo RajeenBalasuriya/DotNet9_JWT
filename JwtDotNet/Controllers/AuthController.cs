@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using JwtDotNet.Entities;
 using JwtDotNet.Models;
 using JwtDotNet.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -17,12 +18,12 @@ namespace JwtDotNet.Controllers
     [ApiController]
     public class AuthController(IAuthService authService) : ControllerBase
     {
-   
+
 
         [HttpPost("register")]
         public ActionResult<User> Register(UserDto request)
         {
-           var user = authService.RegisterAsync(request).Result;
+            var user = authService.RegisterAsync(request).Result;
             if (user is null)
             {
                 return BadRequest("User already exists.");
@@ -39,6 +40,20 @@ namespace JwtDotNet.Controllers
                 return BadRequest("Invalid credentials.");
             }
             return Ok(token);
+        }
+
+        [Authorize]
+        [HttpGet]
+        public IActionResult AuthenticatedOnlyEndpoint()
+        {
+            return Ok("You are authenticated!");
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet("admin-only")]
+        public IActionResult AdminOnlyEndpoint()
+        {
+            return Ok("You are admin!");
         }
 
     
